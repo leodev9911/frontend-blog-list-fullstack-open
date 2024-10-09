@@ -4,7 +4,7 @@ import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import CreateNewBlog from './components/CreateNewBlogForm'
 import Notification from './components/Notification'
-import { Togabble } from './components/Toggable'
+import { Togglable } from './components/Togglable'
 
 const App = () => {
     const newNoteToggableRef = useRef()
@@ -131,13 +131,13 @@ const App = () => {
                         <span>{user.name} logged in</span>
                         <button onClick={handleLogOut}>logout</button>
                     </div>
-                    <Togabble buttonLabel="new note" ref={newNoteToggableRef}>
+                    <Togglable buttonLabel="new note" ref={newNoteToggableRef}>
                         <CreateNewBlog
                             handleAddBlog={handleAddBlog}
                             handleSetNotification={handleSetNotification}
                             newNoteToggableRef={newNoteToggableRef}
                         />
-                    </Togabble>
+                    </Togglable>
                     {blogs
                         .sort((a, b) => Number(b.likes) - Number(a.likes))
                         .map((blog) => (

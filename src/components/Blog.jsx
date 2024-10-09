@@ -17,7 +17,7 @@ export default function Blog({ blog, handleLikePost, user, deleteBlog }) {
             </p>
             {detailsVisibility ? (
                 <>
-                    <a href={blog.url} target='_blank'>{blog.url}</a>
+                    <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
                     <p>
                         likes {blog.likes}{' '}
                         <button onClick={() => handleLikePost(blog.id, blog?.user?.id)}>
