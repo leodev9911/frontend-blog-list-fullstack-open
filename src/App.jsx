@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import CreateNewBlog from './components/CreateNewBlogForm'
 import Notification from './components/Notification'
+import { Togabble } from './components/Toggable'
 
 const App = () => {
+    const newNoteToggableRef = useRef()
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState(
         window.localStorage.getItem('usserSession')
@@ -16,6 +18,67 @@ const App = () => {
         error: '',
         success: '',
     })
+
+    const handleLikePost = async (id, userId) => {
+        try {
+            const blogToEdit = blogs.findIndex((blog) => blog.id === id)
+            const blogsCopy = [...blogs]
+
+            const edittedBlog = {
+                user: userId,
+                likes: blogs[blogToEdit].likes + 1,
+                author: blogs[blogToEdit].author,
+                title: blogs[blogToEdit].title,
+                url: blogs[blogToEdit].url,
+            }
+
+            const response = await blogService.addLike(id, edittedBlog)
+
+            if (response) {
+                blogsCopy[blogToEdit].likes += 1
+                setBlogs(blogsCopy)
+            }
+        } catch (error) {
+            handleSetNotification(
+                'There was an error when trying to edit the note',
+                'error'
+            )
+            console.log(error)
+        }
+    }
+
+    const deleteBlog = async (id) => {
+        try {
+            const blogToEdit = blogs.find((blog) => blog.id === id)
+            let blogsCopy = [...blogs]
+
+            if (
+                window.confirm(
+                    `Remove blog ${blogToEdit.title} by ${blogToEdit.author}`
+                )
+            ) {
+                await blogService.deleteBlog(id)
+
+                blogsCopy = blogsCopy.filter((blog) => blog.id !== blogToEdit.id)
+                setBlogs(blogsCopy)
+            } else {
+                return
+            }
+        } catch (error) {
+            handleSetNotification(
+                'There was an error when trying to delete the note',
+                error
+            )
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (user) {
+            blogService.setToken(user.token)
+            fetchBlogs()
+        }
+    }, [user])
 
     const handleSetNotification = (message, type) => {
         setNotification((prev) => ({
@@ -34,13 +97,6 @@ const App = () => {
     const handleAddBlog = (newBlog) => {
         setBlogs((prev) => [...prev, newBlog])
     }
-
-    useEffect(() => {
-        if (user) {
-            blogService.setToken(user.token)
-            fetchBlogs()
-        }
-    }, [user])
 
     const handleSetUser = (u) => {
         setUser(u)
@@ -75,13 +131,24 @@ const App = () => {
                         <span>{user.name} logged in</span>
                         <button onClick={handleLogOut}>logout</button>
                     </div>
-                    <CreateNewBlog
-                        handleAddBlog={handleAddBlog}
-                        handleSetNotification={handleSetNotification}
-                    />
-                    {blogs.map((blog) => (
-                        <Blog key={blog.id} blog={blog} />
-                    ))}
+                    <Togabble buttonLabel="new note" ref={newNoteToggableRef}>
+                        <CreateNewBlog
+                            handleAddBlog={handleAddBlog}
+                            handleSetNotification={handleSetNotification}
+                            newNoteToggableRef={newNoteToggableRef}
+                        />
+                    </Togabble>
+                    {blogs
+                        .sort((a, b) => Number(b.likes) - Number(a.likes))
+                        .map((blog) => (
+                            <Blog
+                                key={blog.id}
+                                blog={blog}
+                                handleLikePost={handleLikePost}
+                                deleteBlog={deleteBlog}
+                                user={user}
+                            />
+                        ))}
                 </>
             ) : (
                 <LoginForm

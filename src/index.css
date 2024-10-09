@@ -16,3 +16,10 @@
     color: red;
     border-color: red;
 }
+
+.blog-card {
+    padding: 8px;
+    border: 3px solid black;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}

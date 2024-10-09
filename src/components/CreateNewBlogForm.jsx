@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-export default function CreateNewBlog({ handleAddBlog, handleSetNotification }) {
+export default function CreateNewBlog({ handleAddBlog, handleSetNotification, newNoteToggableRef }) {
     const [newBlog, setNewBlog] = useState({
         title: '',
         author: '',
@@ -30,6 +30,7 @@ export default function CreateNewBlog({ handleAddBlog, handleSetNotification }) 
                     url: '',
                 })
                 handleSetNotification(`a new blog ${response.title} added`, 'success')
+                newNoteToggableRef.current.toggleVisibility()
                 handleAddBlog(response)
             }
         } catch (error) {
