@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import CreateNewBlog from './components/CreateNewBlogForm'
 import Notification from './components/Notification'
 import { Togglable } from './components/Togglable'
+import loginService from './services/login'
 
 const App = () => {
     const newNoteToggableRef = useRef()
@@ -45,6 +46,11 @@ const App = () => {
             )
             console.log(error)
         }
+    }
+
+    const handleLogin = async (loginForm) => {
+        const res = await loginService.login(loginForm)
+        return res
     }
 
     const deleteBlog = async (id) => {
@@ -116,6 +122,8 @@ const App = () => {
         }
     }
 
+    console.log(user)
+
     return (
         <div>
             {user ? (
@@ -155,6 +163,7 @@ const App = () => {
                     handleSetUser={handleSetUser}
                     handleSetNotification={handleSetNotification}
                     notification={notification}
+                    handleLogin={handleLogin}
                 />
             )}
         </div>

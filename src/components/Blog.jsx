@@ -9,24 +9,38 @@ export default function Blog({ blog, handleLikePost, user, deleteBlog }) {
 
     return (
         <div className="blog-card">
-            <p>
-                {blog.title} {blog.author}
-                <button onClick={toggleDetails}>
+            <div>
+                <span className="title">
+                    {blog.title} {blog.author}
+                </span>
+                <button className="toggleButton" onClick={toggleDetails}>
                     {detailsVisibility ? 'hide' : 'view'}
                 </button>
-            </p>
+            </div>
             {detailsVisibility ? (
-                <>
-                    <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
-                    <p>
-                        likes {blog.likes}{' '}
-                        <button onClick={() => handleLikePost(blog.id, blog?.user?.id)}>
-                            like
-                        </button>
-                    </p>
+                <div className="blog-card-details">
+                    <a
+                        className="blog-url"
+                        href={blog.url}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        {blog.url}
+                    </a>
+                    <p className="blog-likes">likes {blog.likes}</p>
+                    <button
+                        className="likeButton"
+                        onClick={() => handleLikePost(blog.id, blog?.user?.id)}
+                    >
+                        like
+                    </button>
                     <p>{blog?.user?.name}</p>
-                    {user.username === blog?.user?.username && <button onClick={() => deleteBlog(blog.id)}>remove</button>}
-                </>
+                    {user.username === blog?.user?.username && (
+                        <button onClick={() => deleteBlog(blog.id)}>
+                            remove
+                        </button>
+                    )}
+                </div>
             ) : (
                 <></>
             )}

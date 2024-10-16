@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import loginService from '../services/login'
 import Notification from './Notification'
 
 export default function LoginForm({
     handleSetUser,
     handleSetNotification,
     notification,
+    handleLogin
 }) {
     const [logInForm, setLogInForm] = useState({
         username: '',
@@ -25,7 +25,7 @@ export default function LoginForm({
         event.preventDefault()
 
         try {
-            const user = await loginService.login(logInForm)
+            const user = await handleLogin(logInForm)
             window.localStorage.setItem('usserSession', JSON.stringify(user))
             handleSetUser(user)
             setLogInForm({
@@ -47,7 +47,7 @@ export default function LoginForm({
                     success={notification.success}
                 />
             )}
-            <form onSubmit={handleSubmit}>
+            <form >
                 <div>
                     <label htmlFor="username">Username</label>
                     <input
@@ -68,7 +68,7 @@ export default function LoginForm({
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit">login</button>
+                <button type="submit" onClick={handleSubmit}>login</button>
             </form>
         </>
     )
