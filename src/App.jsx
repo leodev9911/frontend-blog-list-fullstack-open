@@ -128,7 +128,7 @@ const App = () => {
         <div>
             {user ? (
                 <>
-                    <h2>blogs</h2>
+                    <h1>blogs</h1>
                     {(notification.error || notification.success) && (
                         <Notification
                             error={notification.error}

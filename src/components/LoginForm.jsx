@@ -47,7 +47,7 @@ export default function LoginForm({
                     success={notification.success}
                 />
             )}
-            <form >
+            <form>
                 <div>
                     <label htmlFor="username">Username</label>
                     <input
