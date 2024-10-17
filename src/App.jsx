@@ -65,7 +65,9 @@ const App = () => {
             ) {
                 await blogService.deleteBlog(id)
 
-                blogsCopy = blogsCopy.filter((blog) => blog.id !== blogToEdit.id)
+                blogsCopy = blogsCopy.filter(
+                    (blog) => blog.id !== blogToEdit.id
+                )
                 setBlogs(blogsCopy)
             } else {
                 return
@@ -146,17 +148,19 @@ const App = () => {
                             newNoteToggableRef={newNoteToggableRef}
                         />
                     </Togglable>
-                    {blogs
-                        .sort((a, b) => Number(b.likes) - Number(a.likes))
-                        .map((blog) => (
-                            <Blog
-                                key={blog.id}
-                                blog={blog}
-                                handleLikePost={handleLikePost}
-                                deleteBlog={deleteBlog}
-                                user={user}
-                            />
-                        ))}
+                    <ul style={{ listStyle: 'none' }}>
+                        {blogs
+                            .sort((a, b) => Number(b.likes) - Number(a.likes))
+                            .map((blog) => (
+                                <Blog
+                                    key={blog.id}
+                                    blog={blog}
+                                    handleLikePost={handleLikePost}
+                                    deleteBlog={deleteBlog}
+                                    user={user}
+                                />
+                            ))}
+                    </ul>
                 </>
             ) : (
                 <LoginForm

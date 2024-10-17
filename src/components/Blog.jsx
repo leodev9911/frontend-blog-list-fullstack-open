@@ -8,7 +8,7 @@ export default function Blog({ blog, handleLikePost, user, deleteBlog }) {
     }
 
     return (
-        <div className="blog-card">
+        <li className="blog-card">
             <div>
                 <span className="title">
                     {blog.title} {blog.author}
@@ -44,6 +44,6 @@ export default function Blog({ blog, handleLikePost, user, deleteBlog }) {
             ) : (
                 <></>
             )}
-        </div>
+        </li>
     )
 }
